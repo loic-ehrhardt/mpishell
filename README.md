@@ -1,3 +1,4 @@
 # mpishell
 
-A small program that allows debugging MPI applications.
+A small program for interactive sessions with MPI applications.
+
