@@ -12,7 +12,6 @@ from mpi4py import MPI
 class WrappedProcess:
     def __init__(self, argv, mpi_comm):
         self.mpi_comm = mpi_comm
-        assert self.mpi_comm.Get_size() <= 4, "not implemented"
 
         self.process = subprocess.Popen(
             argv,
@@ -55,14 +54,19 @@ class WrappedProcess:
             self.process.stdin.write(line)
 
     def decorate_and_print(self, line):
-        color = {0: colorama.ansi.AnsiBack.RED,
-                 1: colorama.ansi.AnsiBack.GREEN,
-                 2: colorama.ansi.AnsiBack.BLUE,
-                 3: colorama.ansi.AnsiBack.MAGENTA,
-            }[self.mpi_comm.Get_rank()]
         if line.endswith("\n"):
             line = line[:-1]
-        print(f"\033[{color}m{self.mpi_comm.Get_rank()}| {line}\x1b[K\x1b[0m")
+        # Prefix rank.
+        line = f"{self.mpi_comm.Get_rank()}| {line}"
+        if self.mpi_comm.Get_size() <= 4:
+            # Colorize.
+            color = {0: colorama.ansi.AnsiBack.RED,
+                     1: colorama.ansi.AnsiBack.GREEN,
+                     2: colorama.ansi.AnsiBack.BLUE,
+                     3: colorama.ansi.AnsiBack.MAGENTA,
+                }[self.mpi_comm.Get_rank()]
+            line = f"\033[{color}m{line}\x1b[K\x1b[0m"
+        print(line)
 
     def _stdout_stderr_thread(self, pipe):
         for line in pipe:
