@@ -34,14 +34,10 @@ $ mpirun -np 2 mpishell ipython3
 0| Python 3.8.10 (default, Jun  2 2021, 10:49:15)
 0| Type 'copyright', 'credits' or 'license' for more information
 0| IPython 7.13.0 -- An enhanced Interactive Python. Type '?' for help.
-0| /usr/lib/python3/dist-packages/IPython/core/interactiveshell.py:935: UserWarning: Attempting to work in a virtualenv. If you encounter problems, please install IPython inside the virtualenv.
-0|   warn("Attempting to work in a virtualenv. If you encounter problems, please "
 0|
 1| Python 3.8.10 (default, Jun  2 2021, 10:49:15)
 1| Type 'copyright', 'credits' or 'license' for more information
 1| IPython 7.13.0 -- An enhanced Interactive Python. Type '?' for help.
-1| /usr/lib/python3/dist-packages/IPython/core/interactiveshell.py:935: UserWarning: Attempting to work in a virtualenv. If you encounter problems, please install IPython inside the virtualenv.
-1|   warn("Attempting to work in a virtualenv. If you encounter problems, please "
 1|
 from mpi4py import MPI
 0| In [1]:
@@ -52,3 +48,14 @@ MPI.COMM_WORLD.Get_rank()
 1| In [2]: Out[2]: 1
 1|
 ```
+
+Finally, use `CTRL+C` to leave `mpishell`.
+
+## Installation
+
+Simply install it with `pip install mpishell`.
+
+## Limitations
+
+- The standard input is sent to the jobs line by line, no intermediate update is sent.
+- `mpishell` is a bit brittle and errors may occur somewhat randomly.

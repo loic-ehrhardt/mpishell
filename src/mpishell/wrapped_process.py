@@ -26,14 +26,12 @@ class WrappedProcess:
                      # https://github.com/open-mpi/ompi/issues/6981
                      PMIX_MCA_gds="hash"))
 
-        # Standard input thread.
+        # Setup and start threads.
         self.stdin_thread = threading.Thread(
             target=self._root_stdin_thread if self.mpi_comm.Get_rank() == 0
                    else self._non_root_stdin_thread)
         self.stdin_thread.daemon = True
         self.stdin_thread.start()
-
-        # Standard output thread.
         self.stdout_thread = threading.Thread(
             target=self._stdout_stderr_thread, args=(self.process.stdout,))
         self.stdout_thread.daemon = True
